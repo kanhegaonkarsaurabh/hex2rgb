@@ -1,5 +1,17 @@
 use std::{fs::File, io::Read};
 
+struct Color {
+    red: u8,
+    green: u8,
+    blue: u8,
+}
+
+impl Color {
+    fn get_rgb_as_css(&self) -> String {
+        format!("rgb({} {} {})", &self.red, &self.green, &self.blue)
+    }
+}
+
 fn main() {
     // &str because this string literal is directly pulled from
     // the binary itself and points to memory address in the binary
@@ -28,11 +40,13 @@ fn hexcodes_to_rgb(hexcodes: &str) {
         // strip the "#" character
         code = &code[1..];
 
-        let red = u8::from_str_radix(&code[0..2], 16).unwrap();
-        let blue = u8::from_str_radix(&code[2..4], 16).unwrap();
-        let green = u8::from_str_radix(&code[4..6], 16).unwrap();
+        let rgb_color = Color {
+            red: u8::from_str_radix(&code[0..2], 16).unwrap(),
+            green: u8::from_str_radix(&code[2..4], 16).unwrap(),
+            blue: u8::from_str_radix(&code[4..6], 16).unwrap(),
+        };
 
-        println!("rgb({} {} {})", red, blue, green);
+        println!("{}", rgb_color.get_rgb_as_css());
 
         // second plus 1 because each hexcode is separated by a \n
         start_window = end_window + 1;
